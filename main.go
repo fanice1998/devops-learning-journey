@@ -20,14 +20,19 @@ func main() {
 
 	// Call GitHub API get commit count
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/commits", *owner, *repo)
-	resp, err := http.Get(url)
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("User-Agent", "my-devops-tool")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err == nil && resp.StatusCode == 200 {
 		defer resp.Body.Close()
 		body, _ := io.ReadAll(resp.Body)
 		var commits []interface{}
 		err = json.Unmarshal(body, &commits)
 		if err != nil {
-			fmt.Printf("Json parase error, err: %v", err)
+			fmt.Printf("JSON parase error, err: %v\n", err)
+			return
 		}
 		fmt.Printf("你的 repo 目前有 %d 個 commit!\n", len(commits))
 	} else {
