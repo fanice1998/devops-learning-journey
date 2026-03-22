@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Hello DevOps! 學習第一步")
+	name := flag.String("name", "Devops learner", "Enter your name")
+	flag.Parse()
+	fmt.Printf("Hello %s!, This my DevOps learning journey~\n", *name)
 }
